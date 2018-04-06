@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket IO</title>
+</head>
+
+<body>
+    <h1> Index File </h1>
+    <h2> Socket IO Operation Test</h2>
+    <div id="newuser"></div>
+    <div id="future"></div>
+    <form id="form" id="chat_form">
+        <input id="chat_input" type="text">
+        <input type="submit" value="Send">
+    </form>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+// var socket = io.connect('http://localhost:3000');
+var socket = io();
+
+//var socket = io.connect();
+socket.on('connect', function(data) {
+    socket.emit('join', 'Hello from client on connect');
+});
+socket.on('broad', function(data) {
+    $('#future').append(data + "<br/>");
+});
+socket.on('newuser', function(data) {
+    $('#newuser').html(data + "<br/>");
+});
+
+$('form').submit(function(e) {
+    e.preventDefault();
+    var message = $('#chat_input').val();
+    console.log(message);
+    socket.emit('messages', message);
+    $('#chat_input').val('');
+});
+</script>
+
+</html>
